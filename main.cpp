@@ -59,17 +59,3 @@ void connectingEdge(int *classList, int totalClass) {
     }
   }
 }
-
-// # Pseudo Code
-// Input daftar mata kuliah
-// Buat graph berisi vertex kosong mata kuliah
-// Input daftar mahasiswa dan mata kuliah yang diambil
-// buat semua edge antara mahasiswa dan mata kuliah yang diambil
-// Tampilkan graph
-// lakukan algoritma welch-powell untuk pewarnaan graph
-// Simpan hasil warna graph
-// Cetak hasil warna graph
-
-// Metode input mata kuliah yang diambil mahasiswa -> input id matkul
-// 
-
