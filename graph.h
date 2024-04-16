@@ -137,7 +137,7 @@ namespace gr {
       for (int i = 0; i < vertices.size(); i++) {
         Vertex temp;
         temp = vertices.at(i);
-        cout << temp.name << " (" << temp.degree << ") --> ";
+        cout << "[" << temp.id << "] " << temp.name << " (" << temp.degree << ") --> ";
         temp.printEdgeList();
       }
     }
@@ -192,6 +192,7 @@ namespace gr {
       for (int i = 0; i < vertices.size(); i++) {
         colorList[vertices[i].colorIndex].push_back(vertices[i].id);
       }
+      sortById();
     }
 
     void printColoringResult() {

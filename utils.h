@@ -24,6 +24,13 @@ namespace u {
     return input;
   }
 
+  bool getBoolInput(string text = "") {
+    string input = getStringInput(text + " (Y/N): ");
+    if (input == "y" || input == "Y") return true;
+    else if (input == "n" || input == "N") return false;
+    else return false;
+  }
+
   int getChoice(int min = 0, int max = 9, string text = "> ") {
     while (true) {
       int choice = getIntInput(text);
