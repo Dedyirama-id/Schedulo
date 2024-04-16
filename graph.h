@@ -6,6 +6,7 @@
 #include <iterator>
 #include <algorithm>
 #include <map>
+#include "utils.h"
 
 using namespace std;
 
@@ -28,8 +29,9 @@ namespace gr {
   public:
     int id;
     string name;
-    int colorIndex = -1;
+    string alias;
     int degree = 0;
+    int colorIndex = -1;
     list < Edge > edgeList;
 
     Vertex() {
@@ -37,9 +39,10 @@ namespace gr {
       name = "";
     }
 
-    Vertex(int id, string name) {
+    Vertex(int id, string name, string alias) {
       this->id = id;
       this->name = name;
+      this->alias = alias;
     }
 
     Edge addEdge(Edge newEdge) {
@@ -87,6 +90,12 @@ namespace gr {
         vertices.push_back(newVertex);
         cout << "New Vertex Added Successfully" << endl;
       }
+      u::wait();
+    }
+
+    void addVertex(int id, string name, string alias) {
+      Vertex newVertex(id, name, alias);
+      addVertex(newVertex);
     }
 
     Vertex getVertexByID(int vertexId) {
@@ -133,6 +142,13 @@ namespace gr {
       }
     }
 
+    void printVertexList(string separator = " - ") {
+      if (vertices.size() == 0) return;
+      for (const auto& vertex : vertices) {
+        cout << vertex.id << separator << vertex.alias << separator << vertex.name << endl;
+      }
+    }
+
     void resetVertexColor() {
       for (int i = 0; i < vertices.size(); i++) {
         vertices.at(i).colorIndex = -1;
@@ -151,7 +167,6 @@ namespace gr {
         });
     }
 
-    // Make This !!!
     void graphColoring() {
       resetVertexColor();
       welchPowell();
@@ -173,7 +188,6 @@ namespace gr {
           }
         }
       }
-      // Update colorList
       colorList.resize(numColors);
       for (int i = 0; i < vertices.size(); i++) {
         colorList[vertices[i].colorIndex].push_back(vertices[i].id);

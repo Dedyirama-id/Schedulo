@@ -1,51 +1,19 @@
-// Program to scheduling class exam
-
 #include <iostream>
 #include "graph.h"
+#include "utils.h"
 
 using namespace std;
 
 void connectingEdge(int *classList, int totalClass);
+void showSubjects();
+
 
 gr::Graph g;
 
-int main(int argc, char const *argv[]) {
+int main() {
   system("cls");
 
-  cout << "Masukkan Jumlah Mata Kuliah: ";
-  int totalClass;
-  cin >> totalClass;
-
-  for (size_t i = 0; i < totalClass; i++) {
-    string name = "Matkul " + to_string(i + 1);
-    g.addVertex(gr::Vertex(i + 1, name));
-  }
-
-  cout << "\nMasukkan Jumlah Mahasiswa: ";
-  int totalStudent;
-  cin >> totalStudent;
-
-  for (size_t i = 0; i < totalStudent; i++) {
-    string name = "Mahasiswa " + to_string(i + 1);
-    cout << "\n" << name << ": " << endl;;
-
-    int classList[totalClass];
-    for (size_t j = 0; j < totalClass; j++) {
-      cout << "Apakah mengambil matakuliah " << j + 1 << " (Y/N)? ";
-      char answer;
-      cin >> answer;
-      
-      if (answer == 'Y' || answer == 'y') classList[j] = 1;
-      else classList[j] = 0;
-    }
-
-    connectingEdge(classList, totalClass);
-  }
-
-  g.printGraph();
-  g.graphColoring();
-  g.printColoringResult();
-  g.printColorTable();
+  showSubjects();
 
   return 0;
 }
@@ -56,6 +24,37 @@ void connectingEdge(int *classList, int totalClass) {
     for (int j = 0; j < totalClass; j++) {
       if (i == j) continue;
       else if (classList[j] == 1) g.addEdgeByID(i + 1, j + 1);
+    }
+  }
+}
+
+void showSubjects() {
+  int id = 1;
+  while (true) {
+    system("cls");
+    cout << "# DAFTAR MATA KULIAH" << endl;
+    cout << "+-------------------------------------+" << endl;
+    cout << "ID \tAlias \tMata Kuliah" << endl;
+    g.printVertexList("\t");
+    cout << "+-------------------------------------+" << endl;
+    cout << "1. Tambah Mata Kuliah" << endl;
+    cout << "0. Simpan dan Lanjutkan" << endl;
+
+    int choice = u::getChoice(0, 1);
+    string name, alias;
+
+    switch (choice) {
+    case 1:
+      name = u::getStringInput("Masukkan Nama Mata Kuliah: ");
+      alias = u::getStringInput("Masukkan Nama Alias Mata Kuliah: ");
+      g.addVertex(gr::Vertex(id, name, alias));
+      id++;
+      break;
+    case 0:
+      return;
+
+    default:
+      break;
     }
   }
 }
