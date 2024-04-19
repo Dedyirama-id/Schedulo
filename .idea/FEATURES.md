@@ -7,6 +7,6 @@
   <!--// * Perbaiki UI -->
   * Berikan Error Handling
     <!-- //- Jika input tidak sesuai tipe data -->
-    - Jika daftar kuliah kosong
+    - Jika daftar mata kuliah kosong
     - Jika daftar mahasiswa kosong
     - Jika Graph Kosong
