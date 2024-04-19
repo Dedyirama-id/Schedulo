@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <string>
 #include <vector>
 #include <list>
 #include <iterator>
@@ -29,7 +30,7 @@ namespace gr {
   public:
     int id;
     string name;
-    string alias;
+    string code;
     int degree = 0;
     int colorIndex = -1;
     list < Edge > edgeList;
@@ -39,10 +40,10 @@ namespace gr {
       name = "";
     }
 
-    Vertex(int id, string name, string alias) {
+    Vertex(int id, string name, string code) {
       this->id = id;
       this->name = name;
-      this->alias = alias;
+      this->code = code;
     }
 
     Edge addEdge(Edge newEdge) {
@@ -84,17 +85,11 @@ namespace gr {
     }
 
     void addVertex(Vertex newVertex) {
-      if (findVertexByID(newVertex.id) >= 0) {
-        cout << "Vertex with this ID already exist" << endl;
-      } else {
-        vertices.push_back(newVertex);
-        cout << "New Vertex Added Successfully" << endl;
-      }
-      u::wait();
+      if (findVertexByID(newVertex.id) < 0) vertices.push_back(newVertex);
     }
 
-    void addVertex(int id, string name, string alias) {
-      Vertex newVertex(id, name, alias);
+    void addVertex(int id, string name, string code) {
+      Vertex newVertex(id, name, code);
       addVertex(newVertex);
     }
 
@@ -123,29 +118,29 @@ namespace gr {
       }
 
       bool isEdgeExist = checkIfEdgeExistByID(sourceVID, destVID);
-      if (isEdgeExist) {
-        cout << "Edge between " << sourceVID << " and " << destVID << " already exist" << endl;
-      } else {
+      if (isEdgeExist == false) {
         Edge newEdge(destVID);
         vertices.at(sourceLocation).addEdge(newEdge);
-        cout << "Edge between " << sourceVID << " and " << destVID << " added Successfully" << endl;
       }
     }
 
     void printGraph() {
-      cout << "\nvertex count: " << vertices.size() << endl;
+      cout << "\nVertex count: " << vertices.size() << endl;
+      cout << "+---------------------------------------------------------+" << endl;
+
       for (int i = 0; i < vertices.size(); i++) {
         Vertex temp;
         temp = vertices.at(i);
         cout << "[" << temp.id << "] " << temp.name << " (" << temp.degree << ") --> ";
         temp.printEdgeList();
       }
+      cout << "+---------------------------------------------------------+" << endl;
     }
 
     void printVertexList(string separator = " - ") {
       if (vertices.size() == 0) return;
-      for (const auto& vertex : vertices) {
-        cout << vertex.id << separator << vertex.alias << separator << vertex.name << endl;
+      for (const auto &vertex : vertices) {
+        cout << vertex.id << separator << vertex.code << separator << vertex.name << endl;
       }
     }
 

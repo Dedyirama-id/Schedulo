@@ -47,21 +47,21 @@ void showCourseMenu() {
   while (true) {
     system("cls");
     cout << "# DAFTAR MATA KULIAH" << endl;
-    cout << "+-------------------------------------+" << endl;
-    cout << "ID \tAlias \tMata Kuliah" << endl;
+    cout << "+---------------------------------------------------------+" << endl;
+    cout << "ID \tKode \tMata Kuliah" << endl;
     g.printVertexList("\t");
-    cout << "+-------------------------------------+" << endl;
+    cout << "+---------------------------------------------------------+" << endl;
     cout << "1. Tambah Mata Kuliah" << endl;
     cout << "0. Simpan dan Lanjutkan" << endl;
 
     int choice = u::getChoice(0, 1);
-    string name, alias;
+    string name, code;
 
     switch (choice) {
     case 1:
-      name = u::getStringInput("Masukkan Nama Mata Kuliah: ");
-      alias = u::getStringInput("Masukkan Nama Alias Mata Kuliah: ");
-      g.addVertex(gr::Vertex(id, name, alias));
+      name = u::getStringInput("\nMasukkan Nama Mata Kuliah (max 20 char): ", 20);
+      code = u::getStringInput("Masukkan Nama Kode Mata Kuliah (max 5 char): ", 5);
+      g.addVertex(gr::Vertex(id, name, code));
       id++;
       break;
     case 0:
@@ -77,10 +77,10 @@ void showStudentsMenu() {
   while (true) {
     system("cls");
     cout << "# DAFTAR MAHASISWA" << endl;
-    cout << "+-----------------------------------------------+" << endl;
-    cout << "ID \tNama Mahasiswa \tMata Kuliah Pilihan" << endl;
+    cout << "+---------------------------------------------------------+" << endl;
+    cout << "ID \tNama Mahasiswa \t\tMata Kuliah Pilihan" << endl;
     s.print();
-    cout << "+-----------------------------------------------+" << endl;
+    cout << "+---------------------------------------------------------+" << endl;
     cout << "1. Tambah Mahasiswa" << endl;
     cout << "0. Simpan dan Lanjutkan" << endl;
 
@@ -91,16 +91,16 @@ void showStudentsMenu() {
     st::Student newStudent;
     switch (choice) {
     case 1:
-      name = u::getStringInput("Masukkan Nama Mahasiswa: ");
-      id = u::getIntInput("Masukkan ID Mahasiswa: ");
+      id = u::getIntInput("\nMasukkan ID Mahasiswa: ");
+      name = u::getStringInput("Masukkan Nama Mahasiswa (max 20 char): ", 20);
       newStudent.id = id;
       newStudent.name = name;
 
       cout << "Mata Kuliah Yang Diambil: " << endl;
       for (const auto &v : g.vertices) {
-        cout << "  * " << v.alias << " - " << v.name;
+        cout << " - [" << v.code << "] " << v.name;
         bool isTaken = u::getBoolInput();
-        if (isTaken) newStudent.courseList.push_back(st::Course(v.id, v.name, v.alias));
+        if (isTaken) newStudent.courseList.push_back(st::Course(v.id, v.name, v.code));
       }
 
       for (auto it = newStudent.courseList.begin(); it != newStudent.courseList.end(); it++) {
@@ -125,19 +125,19 @@ void showStudentsMenu() {
 void showSchedule() {
   system("cls");
   cout << "# JADWAL" << endl;
-  cout << "+-------------------------------------+" << endl;
+  cout << "+---------------------------------------------------------+" << endl;
   cout << "Sesi \tMata Kuliah" << endl;
 
   int sessionNumber = 1;
   for(auto session = g.colorList.begin(); session != g.colorList.end(); session++) {
     cout << sessionNumber << "\t";
     for(auto course = session->begin(); course != session->end(); course++) {
-      cout << g.getVertexByID(*course).alias;
+      cout << g.getVertexByID(*course).code;
       if(course != session->end() - 1) cout << ", ";
     }
     cout << endl;
     sessionNumber++;
   }
 
-  cout << "+-------------------------------------+" << endl;
+  cout << "+---------------------------------------------------------+" << endl;
 }

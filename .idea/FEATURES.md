@@ -4,8 +4,9 @@
   3. Edit Data
 
 # TODO
-  1. Perbaiki UI
-  2. Berikan Error Handling
-      * Jika daftar kuliah kosong
-      * Jika daftar mahasiswa kosong
-      * Jika input tidak sesuai tipe data
+  <!--// * Perbaiki UI -->
+  * Berikan Error Handling
+    <!-- //- Jika input tidak sesuai tipe data -->
+    - Jika daftar kuliah kosong
+    - Jika daftar mahasiswa kosong
+    - Jika Graph Kosong

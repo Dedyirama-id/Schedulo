@@ -16,7 +16,7 @@ Metode input mata kuliah yang diambil mahasiswa -> input id matkul
 
       # DAFTAR MATA KULIAH
       +-------------------------+
-      ID  Alias  Mata Kuliah
+      ID  Kode  Mata Kuliah
       1   SO
       2   MD
       3   EP
@@ -27,7 +27,7 @@ Metode input mata kuliah yang diambil mahasiswa -> input id matkul
 
       <!-- 1. Tambah Matkul -->
       > Masukkan Nama Mata Kuliah: Struktur Data
-      > Masukkan Nama Alias Mata Kuliah: SD
+      > Masukkan Nama Kode Mata Kuliah: SD
 
   ##  Tampilkan Menu Daftar Mahasiswa
       # DAFTAR MATA KULIAH

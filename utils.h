@@ -1,5 +1,7 @@
 #pragma once 
 #include <iostream>
+#include <limits>
+#include <string>
 
 using namespace std;
 
@@ -9,32 +11,48 @@ namespace u {
     cin.get();
   }
 
-  int getIntInput(string text = "> ") {
-    cout << text;
-    int input;
-    cin >> input;
-    cin.ignore();
-    return input;
+  void clearBuffer() {
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
   }
 
-  string getStringInput(string text = "> ") {
+  int getIntInput(string text = "> ") {
+    int input;
+    while (true) {
+      cin.clear();
+      cout << text;
+      cin >> input;
+      if (cin.fail()) {
+        cout << "Input harus berupa angka!" << endl;
+        cin.clear();
+        clearBuffer();
+      } else {
+        clearBuffer();
+        return input;
+      }
+    };
+  }
+
+  string getStringInput(string text = "> ", int maxLength = 0) {
     string input;
     cout << text;
     getline(cin, input, '\n');
+    if (maxLength > 0) input = input.substr(0, maxLength);
     return input;
   }
 
   bool getBoolInput(string text = "") {
-    string input = getStringInput(text + " (Y/N): ");
-    if (input == "y" || input == "Y") return true;
-    else if (input == "n" || input == "N") return false;
-    else return false;
+    while (true) {
+      string input = getStringInput(text + " (Y/N): ");
+      if (input == "y" || input == "Y") return true;
+      else if (input == "n" || input == "N") return false;
+      cout << "   Input tidak valid!";
+    }
   }
 
   int getChoice(int min = 0, int max = 9, string text = "> ") {
     while (true) {
       int choice = getIntInput(text);
-      if (choice < min || choice > max) cout << "Invalid choice!" << endl;
+      if (choice < min || choice > max) cout << "Pilihan tidak valid!" << endl;
       else return choice;
     }
   }
