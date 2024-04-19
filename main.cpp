@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstdlib>
 #include "graph.h"
 #include "utils.h"
 #include "students.h"
@@ -52,9 +53,10 @@ void showCourseMenu() {
     g.printVertexList("\t");
     cout << "+---------------------------------------------------------+" << endl;
     cout << "1. Tambah Mata Kuliah" << endl;
-    cout << "0. Simpan dan Lanjutkan" << endl;
+    cout << "2. Simpan dan Lanjutkan" << endl;
+    cout << "0. Batalkan dan Keluar Dari Program" << endl;
 
-    int choice = u::getChoice(0, 1);
+    int choice = u::getChoice(0, 2);
     string name, code;
 
     switch (choice) {
@@ -64,9 +66,13 @@ void showCourseMenu() {
       g.addVertex(gr::Vertex(id, name, code));
       id++;
       break;
+    case 2:
+      if (g.isVerticesEmpty() == false) return;
+      cout << "Harus ada minimal 1 mata kuliah yang ditambahkan!" << endl;
+      u::wait();
+      break;
     case 0:
-      return;
-
+      exit(0);
     default:
       break;
     }
@@ -82,7 +88,9 @@ void showStudentsMenu() {
     s.print();
     cout << "+---------------------------------------------------------+" << endl;
     cout << "1. Tambah Mahasiswa" << endl;
-    cout << "0. Simpan dan Lanjutkan" << endl;
+    cout << "2. Simpan dan Lanjutkan" << endl;
+    cout << "0. Batalkan dan Keluar Dari Program" << endl;
+
 
     int choice = u::getChoice(0, 1);
     string name;
@@ -113,9 +121,13 @@ void showStudentsMenu() {
 
       s.add(newStudent);
       break;
+    case 2:
+      if (s.isEmpty() == false) return;
+      cout << "Harus ada minimal 1 mahasiswa yang ditambahkan!" << endl;
+      u::wait();
+      break;
     case 0:
-      return;
-
+      exit(0);
     default:
       break;
     }
@@ -129,11 +141,11 @@ void showSchedule() {
   cout << "Sesi \tMata Kuliah" << endl;
 
   int sessionNumber = 1;
-  for(auto session = g.colorList.begin(); session != g.colorList.end(); session++) {
+  for (auto session = g.colorList.begin(); session != g.colorList.end(); session++) {
     cout << sessionNumber << "\t";
-    for(auto course = session->begin(); course != session->end(); course++) {
+    for (auto course = session->begin(); course != session->end(); course++) {
       cout << g.getVertexByID(*course).code;
-      if(course != session->end() - 1) cout << ", ";
+      if (course != session->end() - 1) cout << ", ";
     }
     cout << endl;
     sessionNumber++;

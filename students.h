@@ -46,18 +46,22 @@ namespace st {
 
   class StudentList {
   public:
-    vector<Student> StudentList;
+    vector<Student> studentList;
+
+    bool isEmpty() {
+      return studentList.size() == 0;
+    }
 
     void add(Student newStudent) {
-      StudentList.push_back(newStudent);
+      studentList.push_back(newStudent);
     }
 
     void add(int id, string name) {
-      StudentList.push_back(Student(id, name));
+      studentList.push_back(Student(id, name));
     }
 
     void print(string courseListSeparator = ", ") {
-      for (auto it = StudentList.begin(); it != StudentList.end(); it++) {
+      for (auto it = studentList.begin(); it != studentList.end(); it++) {
         it->print(courseListSeparator);
         cout << endl;
       }

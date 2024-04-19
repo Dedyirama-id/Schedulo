@@ -77,6 +77,10 @@ namespace gr {
     vector < Vertex > vertices;
     vector<vector<int>> colorList;
 
+    bool isVerticesEmpty() {
+      return vertices.size() == 0;
+    }
+
     int findVertexByID(int vertexId) {
       for (int i = 0; i < vertices.size(); i++) {
         if (vertices.at(i).id == vertexId) return i;
