@@ -6,13 +6,14 @@
 using namespace std;
 
 namespace u {
+  void clearBuffer() {
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+  }
+
   void wait(string text = "") {
     cout << text;
     cin.get();
-  }
-
-  void clearBuffer() {
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    clearBuffer();
   }
 
   int getIntInput(string text = "> ") {
