@@ -64,30 +64,35 @@ void pushCourselistToGraph(vector<st::Course> newCourseList) {
 void showDefaultMenu() {
   system("cls");
   cout << "# PROGRAM MATA KULIAH" << endl;
-  // cout << "1. Gunakan File External" << endl;
-  // cout << "2. Input Data Secara Manual" << endl;
-  // cout << "0. Batalkan dan Keluar Dari Program" << endl;
+  cout << "1. Gunakan File External" << endl;
+  cout << "2. Input Data Secara Manual" << endl;
+  cout << "0. Batalkan dan Keluar Dari Program" << endl;
 
-  // int choice = u::getChoice(0, 2);
-  // switch (choice) {
-  // case 1:
-  //   loadInputFile();
-  //   return;
-  // default: 
-  //   return;
-  // }
+  int choice = u::getChoice(0, 2);
+  switch (choice) {
+  case 1:
+    loadInputFile();
+    return;
+
+  default:
+    return;
+  }
 
   loadInputFile();
 }
 
 void loadInputFile() {
-  string fileName = "input/test.txt";
+  string fileName = "input/";
   inputFile.open(fileName);
-  // while (inputFile.is_open() == false) {
-  //   fileName += u::getStringInput("Masukkan Nama File: ");
-  //   inputFile.open(fileName);
-  //   if (inputFile.is_open() == false) cout << "File tidak ditemukan!" << endl;
-  // }
+  while (inputFile.is_open() == false) {
+    string input = u::getStringInput("\nMasukkan Nama File: (input.txt) ");
+    if (input == "") input = "input.txt";
+    if (input.find(".txt") == string::npos) input += ".txt";
+
+    fileName += input;
+    inputFile.open(fileName);
+    if (inputFile.is_open() == false) cout << "File tidak ditemukan!" << endl;
+  }
 
   while (inputFile.eof() == false) {
     string line;
@@ -142,7 +147,7 @@ void showCourseMenu() {
 
     switch (choice) {
     case 1:
-      id = u::getStringInput("Masukkan Nama Kode Mata Kuliah (max 5 char): ", 5);
+      id = u::getStringInput("\nMasukkan Kode Mata Kuliah (max 5 char): ", 5);
       name = u::getStringInput("Masukkan Nama Mata Kuliah (max 20 char): ", 20);
       mainGraph.addVertex(gr::Vertex(id, name));
       break;
