@@ -1,11 +1,11 @@
-001- Mahasiswa 1<M1,  M2, M6>
-002-Mahasiswa 2<M1,M5, M6>
+001- Mahasiswa 1<m1,  M2, M6>
+002-Mahasiswa 2<M1,m5, M6>
 003 -Mahasiswa 3<M1, M3, M5>
 004-Mahasiswa 4 <M4, M5>
 005-Mahasiswa 5<M2, M4>
-
+  
 006-Mahasiswa  6<M1, M3>
-007-Mahasiswa 7<M5, M6>
+007-Mahasiswa 7   <M5, M6>
 008-Mahasiswa 8<M1, M2>
-009-Mahasiswa 9<M3, M5>
+009-Mahasiswa    9<M3, M5  >
 010-Mahasiswa 10<M1, M6>

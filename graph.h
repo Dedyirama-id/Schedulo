@@ -131,7 +131,6 @@ namespace gr {
       if (isEdgeExist == false) {
         Edge newEdge(destVID);
         vertices.at(sourceLocation).addEdge(newEdge);
-        cout << "Edge " << sourceVID << " - " << destVID << " added." << endl;
       }
     }
 

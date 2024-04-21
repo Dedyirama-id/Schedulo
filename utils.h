@@ -70,4 +70,36 @@ namespace u {
       else return choice;
     }
   }
+
+  string capitalize(string str) {
+    for (int i = 0; i < str.length(); i++) {
+      if (tolower(str[i]) < 'a' || tolower(str[i]) > 'z') continue;
+      else if (i == 0 || str[i - 1] == ' ') str[i] = toupper(str[i]);
+      else str[i] = tolower(str[i]);
+    }
+    return str;
+  }
+
+  string toUppercase(string str) {
+    for (int i = 0; i < str.length(); i++) {
+      if (toupper(str[i]) < 'A' || toupper(str[i]) > 'Z') continue;
+      str[i] = toupper(str[i]);
+    };
+    return str;
+  }
+
+  string cleanString(string str) {
+    str = fixDoubleSpaces(str);
+    for (int i = 0; i < str.length(); i++) {
+      if (str[i] != ' ' && str[i] != '\t' ) break;
+      str.erase(i, 1);
+    }
+
+    for (int i = str.length() - 1; i >= 0; i--) {
+      if (str[i] != ' ' && str[i] != '\t') break;
+      str.erase(i, 1);
+    }
+
+    return str;
+  }
 }

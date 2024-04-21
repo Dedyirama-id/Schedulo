@@ -92,22 +92,25 @@ void loadInputFile() {
   while (inputFile.eof() == false) {
     string line;
     getline(inputFile, line);
-    line = u::fixDoubleSpaces(line);
+    line = u::cleanString(line);
 
     st::Student newStudent;
     if (line == "") continue;
 
     newStudent.id = stoi(line.substr(0, line.find("-")));
-    newStudent.name = line.substr(
+    string name = line.substr(
       line.find("-") + 1,
       line.find("<") - (line.find("-") + 1)
     );
+    name = u::cleanString(name);
+    newStudent.name = u::capitalize(name);
 
     string courseListBlock = line.substr(
       line.find("<") + 1,
       line.find(">") - (line.find("<") + 1)
     );
     courseListBlock = u::removeSpaces(courseListBlock);
+    courseListBlock = u::toUppercase(courseListBlock);
 
     while (courseListBlock.find(",") != string::npos) {
       const string id = courseListBlock.substr(0, courseListBlock.find(","));
