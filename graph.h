@@ -147,7 +147,6 @@ namespace gr {
       cout << "+---------------------------------------------------------+" << endl;
     }
 
-    // ===================================================================
     void graphColoring() {
       resetVertexColor();
       welchPowell();
@@ -173,7 +172,7 @@ namespace gr {
       for (int i = 0; i < vertices.size(); i++) {
         colorList[vertices[i].colorIndex].push_back(vertices[i].id);
       }
-      // sortById();
+      sortById();
     }
 
     void printVertexList(string separator = " - ") {
