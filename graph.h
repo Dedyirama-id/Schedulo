@@ -17,33 +17,32 @@ namespace gr {
 
   class Edge {
   public:
-    int id;
+    string id;
 
     Edge() {}
-
-    Edge(int vertexId) {
-      id = vertexId;
-    }
+    Edge(string vertexId) : id(vertexId) {}
   };
 
   class Vertex {
   public:
-    int id;
+    string id;
     string name;
-    string code;
     int degree = 0;
     int colorIndex = -1;
     list < Edge > edgeList;
 
-    Vertex() {
-      id = 0;
-      name = "";
+    Vertex() {}
+    Vertex(string id, string name) : id(id), name(name) {}
+
+    bool isColored() {
+      return colorIndex >= 0;
     }
 
-    Vertex(int id, string name, string code) {
-      this->id = id;
-      this->name = name;
-      this->code = code;
+    bool isNeighborhood(string vertexId) {
+      for (auto it = edgeList.begin(); it != edgeList.end(); it++) {
+        if (it->id == vertexId) return true;
+      }
+      return false;
     }
 
     Edge addEdge(Edge newEdge) {
@@ -59,93 +58,31 @@ namespace gr {
       }
       cout << "]" << endl;
     }
-
-    bool isColored() {
-      return colorIndex >= 0;
-    }
-
-    bool isNeighborhood(int vertexId) {
-      for (auto it = edgeList.begin(); it != edgeList.end(); it++) {
-        if (it->id == vertexId) return true;
-      }
-      return false;
-    }
   };
 
   class Graph {
   public:
     vector < Vertex > vertices;
-    vector<vector<int>> colorList;
+    vector<vector<string>> colorList;
 
     bool isVerticesEmpty() {
       return vertices.size() == 0;
     }
 
-    int findVertexByID(int vertexId) {
-      for (int i = 0; i < vertices.size(); i++) {
-        if (vertices.at(i).id == vertexId) return i;
-      }
-      return -1;
-    }
-
-    void addVertex(Vertex newVertex) {
-      if (findVertexByID(newVertex.id) < 0) vertices.push_back(newVertex);
-    }
-
-    void addVertex(int id, string name, string code) {
-      Vertex newVertex(id, name, code);
-      addVertex(newVertex);
-    }
-
-    Vertex getVertexByID(int vertexId) {
+    Vertex getVertexByID(string vertexId) {
       for (int i = 0; i < vertices.size(); i++) {
         if (vertices.at(i).id == vertexId) return vertices.at(i);
       }
     }
 
-    bool checkIfEdgeExistByID(int sourceVID, int destVID) {
-      Vertex v = getVertexByID(sourceVID);
-      list < Edge > e;
-      e = v.edgeList;
-      for (auto it = e.begin(); it != e.end(); it++) {
+    bool checkIfEdgeExistByID(string sourceVID, string destVID) {
+      Vertex tempVertex = getVertexByID(sourceVID);
+      list < Edge > tempEdgeList;
+      tempEdgeList = tempVertex.edgeList;
+      for (auto it = tempEdgeList.begin(); it != tempEdgeList.end(); it++) {
         if (it->id == destVID) return true;
       }
       return false;
-    }
-
-    void addEdgeByID(int sourceVID, int destVID) {
-      int sourceLocation = findVertexByID(sourceVID);
-      int destLocation = findVertexByID(destVID);
-      if (sourceLocation < 0 || destLocation < 0) {
-        cout << "Invalid Vertex ID entered." << endl;
-        return;
-      }
-
-      bool isEdgeExist = checkIfEdgeExistByID(sourceVID, destVID);
-      if (isEdgeExist == false) {
-        Edge newEdge(destVID);
-        vertices.at(sourceLocation).addEdge(newEdge);
-      }
-    }
-
-    void printGraph() {
-      cout << "\nVertex count: " << vertices.size() << endl;
-      cout << "+---------------------------------------------------------+" << endl;
-
-      for (int i = 0; i < vertices.size(); i++) {
-        Vertex temp;
-        temp = vertices.at(i);
-        cout << "[" << temp.id << "] " << temp.name << " (" << temp.degree << ") --> ";
-        temp.printEdgeList();
-      }
-      cout << "+---------------------------------------------------------+" << endl;
-    }
-
-    void printVertexList(string separator = " - ") {
-      if (vertices.size() == 0) return;
-      for (const auto &vertex : vertices) {
-        cout << vertex.id << separator << vertex.code << separator << vertex.name << endl;
-      }
     }
 
     void resetVertexColor() {
@@ -166,6 +103,52 @@ namespace gr {
         });
     }
 
+    int findVertexByID(string vertexId) {
+      for (int i = 0; i < vertices.size(); i++) {
+        if (vertices.at(i).id == vertexId) return i;
+      }
+      return -1;
+    }
+
+    void addVertex(Vertex newVertex) {
+      if (findVertexByID(newVertex.id) < 0) vertices.push_back(newVertex);
+    }
+
+    void addVertex(string id, string name) {
+      Vertex newVertex(id, name);
+      if (findVertexByID(newVertex.id) < 0) vertices.push_back(newVertex);
+    }
+
+    void addEdgeByID(string sourceVID, string destVID) {
+      int sourceLocation = findVertexByID(sourceVID);
+      int destLocation = findVertexByID(destVID);
+      if (sourceLocation < 0 || destLocation < 0) {
+        cout << "Invalid Vertex ID entered." << endl;
+        return;
+      }
+
+      bool isEdgeExist = checkIfEdgeExistByID(sourceVID, destVID);
+      if (isEdgeExist == false) {
+        Edge newEdge(destVID);
+        vertices.at(sourceLocation).addEdge(newEdge);
+        cout << "Edge " << sourceVID << " - " << destVID << " added." << endl;
+      }
+    }
+
+    void printGraph() {
+      cout << "\nVertex count: " << vertices.size() << endl;
+      cout << "+---------------------------------------------------------+" << endl;
+
+      for (int i = 0; i < vertices.size(); i++) {
+        Vertex temp;
+        temp = vertices.at(i);
+        cout << "[" << temp.id << "] " << temp.name << " (" << temp.degree << ") --> ";
+        temp.printEdgeList();
+      }
+      cout << "+---------------------------------------------------------+" << endl;
+    }
+
+    // ===================================================================
     void graphColoring() {
       resetVertexColor();
       welchPowell();
@@ -191,7 +174,14 @@ namespace gr {
       for (int i = 0; i < vertices.size(); i++) {
         colorList[vertices[i].colorIndex].push_back(vertices[i].id);
       }
-      sortById();
+      // sortById();
+    }
+
+    void printVertexList(string separator = " - ") {
+      if (vertices.size() == 0) return;
+      for (const auto &vertex : vertices) {
+        cout << vertex.id << separator << vertex.name << endl;
+      }
     }
 
     void printColoringResult() {
@@ -203,9 +193,9 @@ namespace gr {
 
     void printColorTable() {
       cout << "\nColor Table:" << endl;
-      for (const vector<int> &row : colorList) {
+      for (const vector<string> &row : colorList) {
         cout << "[";
-        for (const int &col : row) {
+        for (const string &col : row) {
           cout << col << " ";
         }
         cout << "]" << endl;
