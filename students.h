@@ -1,20 +1,16 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include "graph.h"
 
 using namespace std;
 
 namespace st {
   struct Course {
-    int id;
+    string id;
     string name;
-    string code;
 
-    Course(int id, string name, string code) {
-      this->id = id;
-      this->name = name;
-      this->code = code;
-    }
+    Course(string id, string name) : id(id), name(name) {}
   };
 
   class Student {
@@ -24,11 +20,8 @@ namespace st {
     vector<Course> courseList;
 
     Student() {}
-
-    Student(int id, string name) {
-      this->id = id;
-      this->name = name;
-    }
+    Student(int id, string name) : id(id), name(name) {}
+    Student(int id, string name, vector<Course> courseList) : id(id), name(name), courseList(courseList) {}
 
     void print(string courseListSeparator = ", ") {
       cout << id << "\t" << name;
@@ -37,7 +30,7 @@ namespace st {
       else if (name.length() <= 15) cout << "\t\t";
 
       for (auto it = courseList.begin(); it != courseList.end(); it++) {
-        cout << it->code;
+        cout << it->id;
         if (it != courseList.end() - 1) cout << courseListSeparator;
       }
       if (courseList.begin() == courseList.end()) cout << "-";
@@ -56,13 +49,14 @@ namespace st {
       studentList.push_back(newStudent);
     }
 
-    void add(int id, string name) {
-      studentList.push_back(Student(id, name));
+    void add(int id, string name, vector<Course> courseList) {
+      Student newStudent(id, name, courseList);
+      studentList.push_back(newStudent);
     }
 
     void print(string courseListSeparator = ", ") {
-      for (auto it = studentList.begin(); it != studentList.end(); it++) {
-        it->print(courseListSeparator);
+      for (int i = 0; i < studentList.size(); i++) {
+        studentList.at(i).print(courseListSeparator);
         cout << endl;
       }
     }
