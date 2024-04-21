@@ -13,7 +13,20 @@ namespace u {
   void wait(string text = "") {
     cout << text;
     cin.get();
-    clearBuffer();
+  }
+
+  string fixDoubleSpaces(string str) {
+    while (str.find("  ") != string::npos) {
+      str = str.replace(str.find("  "), 2, " ");
+    }
+    return str;
+  }
+
+  string removeSpaces(string str) {
+    while (str.find(" ") != string::npos) {
+      str = str.replace(str.find(" "), 1, "");
+    }
+    return str;
   }
 
   int getIntInput(string text = "> ") {

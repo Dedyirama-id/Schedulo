@@ -10,6 +10,7 @@ namespace st {
     string id;
     string name;
 
+    Course() {}
     Course(string id, string name) : id(id), name(name) {}
   };
 
