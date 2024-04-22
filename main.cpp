@@ -84,16 +84,16 @@ void showDefaultMenu() {
 }
 
 void loadInputFile() {
-  string fileName = "input/";
-  inputFile.open(fileName);
   while (inputFile.is_open() == false) {
+    string fileName = "input/";
     string input = u::getStringInput("\nMasukkan Nama File: (input.txt) ");
     if (input == "") input = "input.txt";
     if (input.find(".txt") == string::npos) input += ".txt";
 
     fileName += input;
     inputFile.open(fileName);
-    if (inputFile.is_open() == false) cout << "File tidak ditemukan!" << endl;
+    if (inputFile.is_open() == true) break;
+    cout << "File tidak ditemukan!" << endl;
   }
 
   while (inputFile.eof() == false) {
