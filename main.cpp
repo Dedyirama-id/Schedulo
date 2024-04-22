@@ -14,11 +14,13 @@ void showSchedule();
 void loadInputFile();
 void connectAllEdgesFromCourseList(vector<st::Course> newCourseList);
 void pushCourselistToGraph(vector<st::Course> newCourseList);
+void showResultMenu();
 
 gr::Graph mainGraph;
 st::StudentList studentList;
 
 ifstream inputFile;
+ofstream outputFile;
 
 int main() {
   system("cls");
@@ -35,7 +37,7 @@ int main() {
   cout << "# Menyusun Jadwal..." << endl;
   mainGraph.graphColoring();
 
-  showSchedule();
+  showResultMenu();
 
   inputFile.close();
   return 0;
@@ -235,4 +237,52 @@ void showSchedule() {
   }
 
   cout << "+---------------------------------------------------------+" << endl;
+}
+
+void showResultMenu() {
+  while (true) {
+    system("cls");
+    showSchedule();
+    cout << "1. Simpan ke File" << endl;
+    cout << "0. Keluar Tanpa Menyimpan" << endl;
+
+    int choice = u::getChoice(0, 1);
+    string fileName = "output/";
+    string input;
+    int sessionNumber;
+    switch (choice) {
+    case 1:
+      while (true) {
+        input = u::getStringInput("\nMasukkan Nama File: (output.txt) ");
+        if (input == "") input = "output.txt";
+        if (input.find(".txt") == string::npos) input += ".txt";
+
+        fileName += input;
+        inputFile.open(fileName);
+        if (inputFile.is_open() == true) break;
+        cout << "Gagal Membuat File! Coba Lagi..." << endl;
+      }
+
+      outputFile.open(fileName, ios::out | ios::trunc);
+      outputFile << "Sesi \tMata Kuliah" << endl;
+
+      sessionNumber = 1;
+      for (auto session = mainGraph.colorList.begin(); session != mainGraph.colorList.end(); session++) {
+        outputFile << sessionNumber << "\t";
+        for (auto course = session->begin(); course != session->end(); course++) {
+          outputFile << mainGraph.getVertexByID(*course).id;
+          if (course != session->end() - 1) outputFile << ",";
+        }
+        outputFile << endl;
+        sessionNumber++;
+      }
+      outputFile.close();
+
+      cout << "Jadwal Telah Disimpan!" << endl;
+      u::wait();
+
+    default:
+      return;
+    }
+  }
 }
