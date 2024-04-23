@@ -1,4 +1,0 @@
-Sesi 	Mata Kuliah
-1	M1,M4
-2	M5,M2
-3	M6,M3
