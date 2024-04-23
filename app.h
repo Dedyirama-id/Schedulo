@@ -17,13 +17,18 @@ namespace app {
     void printMenu() {
       cout << "\e[?25l";
       for (int i = 1; i < menuList.size(); i++) {
+        if (i == currentOption) cout << BOLD << BLUE;
         cout << (currentOption == i ? "> " : "  ") << menuList.at(i) << endl;
+        cout << RESET;
       }
+
+      if (currentOption == 0) cout << BOLD << BLUE;
       cout << (currentOption == 0 ? "> " : "  ") << menuList.at(0) << endl;
+      cout << RESET;
     }
 
     int getChoice() {
-      // cout << "\e[?25l";
+      cout << "\e[?25l";
       while (true) {
         printMenu();
 
@@ -47,4 +52,20 @@ namespace app {
       }
     }
   };
+
+  void printH1(string text) {
+    cout << BOLD << text << RESET << endl;
+  }
+
+  void printSuccess(string text) {
+    cout << GREEN << text << RESET << endl;
+  }
+
+  void printWarning(string text) {
+    cout << YELLOW << text << RESET << endl;
+  }
+
+  void printError(string text) {
+    cout << RED << text << RESET << endl;
+  }
 }

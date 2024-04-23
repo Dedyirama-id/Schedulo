@@ -103,7 +103,7 @@ void loadInputFile(string fileName) {
     inputFile.open(filePath);
 
     if (inputFile.is_open() == false) {
-      cout << "File Input Tidak Ditemukan!" << endl;
+      app::printWarning("File Tidak Ditemukan!");
       u::wait();
       exit(0);
     }
@@ -117,7 +117,9 @@ void loadInputFile(string fileName) {
       filePath += input;
       inputFile.open(filePath);
       if (inputFile.is_open() == true) break;
-      cout << "File tidak ditemukan!" << endl;
+
+      app::printWarning("File Tidak Ditemukan!");
+      u::wait();
     }
   }
 
@@ -157,7 +159,7 @@ void loadInputFile(string fileName) {
 
 void showDefaultMenu() {
   system("cls");
-  cout << "# PROGRAM MATA KULIAH" << endl;
+  app::printH1("# MENU UTAMA");
 
   app::Menu defaultMenu({"Batalkan dan Keluar Dari Program", "Gunakan File External", "Input Data Secara Manual"});
   int choice = defaultMenu.getChoice();
@@ -180,7 +182,7 @@ void showDefaultMenu() {
 void showCourseMenu() {
   while (true) {
     system("cls");
-    cout << "# DAFTAR MATA KULIAH" << endl;
+    app::printH1("# DAFTAR MATA KULIAH");
     cout << DIVIDER << endl;
     cout << "ID \tMata Kuliah" << endl;
     mainGraph.printVertexList("\t");
@@ -196,7 +198,7 @@ void showCourseMenu() {
 
     case 2:
       if (mainGraph.isVerticesEmpty() == false) return;
-      cout << "Harus ada minimal 1 mata kuliah yang ditambahkan!" << endl;
+      app::printWarning("Harus ada minimal 1 mata kuliah yang ditambahkan!");
       u::wait();
       break;
 
@@ -212,7 +214,7 @@ void showCourseMenu() {
 void showStudentsMenu() {
   while (true) {
     system("cls");
-    cout << "# DAFTAR MAHASISWA" << endl;
+    app::printH1("# DAFTAR MAHASISWA");
     cout << DIVIDER << endl;
     cout << "ID \tNama Mahasiswa \t\tMata Kuliah Pilihan" << endl;
     studentList.print();
@@ -228,7 +230,7 @@ void showStudentsMenu() {
 
     case 2:
       if (studentList.isEmpty() == false) return;
-      cout << "Harus ada minimal 1 mahasiswa yang ditambahkan!" << endl;
+      app::printWarning("Harus ada minimal 1 mahasiswa yang ditambahkan!");
       u::wait();
       break;
 
@@ -264,7 +266,7 @@ void showResultMenu() {
           outputFile.close();
           break;
         }
-        cout << "Gagal Membuat File! Coba Lagi..." << endl;
+        app::printWarning("File tidak ditemukan, silahkan coba lagi!");
       }
 
       saveColorListToFile(input);
@@ -277,7 +279,8 @@ void showResultMenu() {
 
 void showSchedule() {
   system("cls");
-  cout << "# JADWAL" << endl;
+
+  app::printH1("# JADWAL");
   cout << DIVIDER << endl;
   cout << "Sesi \tMata Kuliah" << endl;
 
@@ -302,11 +305,11 @@ void saveColorListToFile(string fileName) {
     filePath += fileName;
     outputFile.open(filePath, ios::out | ios::trunc);
   } else {
-    cout << "Nama File Tidak Valid!" << endl;
+    app::printError("Nama File Tidak Valid!");
     exit(0);
   }
 
-  if (outputFile.is_open() == false) cout << "Gagal Menulis File!" << endl;
+  if (outputFile.is_open() == false) app::printError("Gagal Menulis File!");
 
   outputFile << "Sesi \tMata Kuliah" << endl;
 
@@ -322,5 +325,5 @@ void saveColorListToFile(string fileName) {
   }
   outputFile.close();
 
-  cout << "Jadwal Telah Disimpan!" << endl;
+  app::printSuccess("File Berhasil Disimpan!");
 }

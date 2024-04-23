@@ -2,6 +2,7 @@
 #include <iostream>
 #include <limits>
 #include <string>
+#include "ansi_escape_sequences.h"
 
 using namespace std;
 
@@ -36,7 +37,7 @@ namespace u {
       cout << text;
       cin >> input;
       if (cin.fail()) {
-        cout << "Input harus berupa angka!" << endl;
+        cout << YELLOW << "Input harus berupa angka!" << RESET << endl;
         cin.clear();
         clearBuffer();
       } else {
@@ -59,14 +60,14 @@ namespace u {
       string input = getStringInput(text + " (Y/N): ");
       if (input == "y" || input == "Y") return true;
       else if (input == "n" || input == "N") return false;
-      cout << "   Input tidak valid!";
+      cout << YELLOW << "   Input tidak valid!" << RESET;
     }
   }
 
   int getChoice(int min = 0, int max = 9, string text = "> ") {
     while (true) {
       int choice = getIntInput(text);
-      if (choice < min || choice > max) cout << "Pilihan tidak valid!" << endl;
+      if (choice < min || choice > max) cout << YELLOW << "Pilihan tidak valid!" << RESET << endl;
       else return choice;
     }
   }
