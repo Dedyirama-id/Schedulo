@@ -8,6 +8,8 @@
 
 using namespace std;
 
+#define DIVIDER "+---------------------------------------------------------+"
+
 void showDefaultMenu();
 void showCourseMenu();
 void showStudentsMenu();
@@ -66,6 +68,29 @@ int main(int argc, char *argv[]) {
 
   inputFile.close();
   return 0;
+}
+
+st::Student getNewStudentData() {
+  st::Student newStudent;
+  int id = u::getIntInput("\nMasukkan ID Mahasiswa: ");
+  string name = u::getStringInput("Masukkan Nama Mahasiswa (max 20 char): ", 20);
+  newStudent.id = id;
+  newStudent.name = name;
+
+  cout << "Mata Kuliah Yang Diambil: " << endl;
+  for (const auto &v : mainGraph.vertices) {
+    cout << " - [" << v.id << "] " << v.name;
+    bool isTaken = u::getBoolInput();
+    if (isTaken) newStudent.courseList.push_back(st::Course(v.id, v.name));
+  }
+
+  return newStudent;
+}
+
+gr::Vertex getNewCourseVertexData() {
+  string id = u::getStringInput("\nMasukkan Kode Mata Kuliah (max 5 char): ", 5);
+  string name = u::getStringInput("Masukkan Nama Mata Kuliah (max 20 char): ", 20);
+  return gr::Vertex(id, name);
 }
 
 void showDefaultMenu() {
@@ -155,22 +180,19 @@ void showCourseMenu() {
   while (true) {
     system("cls");
     cout << "# DAFTAR MATA KULIAH" << endl;
-    cout << "+---------------------------------------------------------+" << endl;
+    cout << DIVIDER << endl;
     cout << "ID \tMata Kuliah" << endl;
     mainGraph.printVertexList("\t");
-    cout << "+---------------------------------------------------------+" << endl;
+    cout << DIVIDER << endl;
     cout << "1. Tambah Mata Kuliah" << endl;
     cout << "2. Simpan dan Lanjutkan" << endl;
     cout << "0. Batalkan dan Keluar Dari Program" << endl;
 
     int choice = u::getChoice(0, 2);
-    string id, name;
 
     switch (choice) {
     case 1:
-      id = u::getStringInput("\nMasukkan Kode Mata Kuliah (max 5 char): ", 5);
-      name = u::getStringInput("Masukkan Nama Mata Kuliah (max 20 char): ", 20);
-      mainGraph.addVertex(gr::Vertex(id, name));
+      mainGraph.addVertex(getNewCourseVertexData());
       break;
 
     case 2:
@@ -192,34 +214,18 @@ void showStudentsMenu() {
   while (true) {
     system("cls");
     cout << "# DAFTAR MAHASISWA" << endl;
-    cout << "+---------------------------------------------------------+" << endl;
+    cout << DIVIDER << endl;
     cout << "ID \tNama Mahasiswa \t\tMata Kuliah Pilihan" << endl;
     studentList.print();
-    cout << "+---------------------------------------------------------+" << endl;
+    cout << DIVIDER << endl;
     cout << "1. Tambah Mahasiswa" << endl;
     cout << "2. Simpan dan Lanjutkan" << endl;
     cout << "0. Batalkan dan Keluar Dari Program" << endl;
 
     int choice = u::getChoice(0, 2);
-    string name;
-    int id = -1;
-
-    st::Student newStudent;
     switch (choice) {
     case 1:
-      id = u::getIntInput("\nMasukkan ID Mahasiswa: ");
-      name = u::getStringInput("Masukkan Nama Mahasiswa (max 20 char): ", 20);
-      newStudent.id = id;
-      newStudent.name = name;
-
-      cout << "Mata Kuliah Yang Diambil: " << endl;
-      for (const auto &v : mainGraph.vertices) {
-        cout << " - [" << v.id << "] " << v.name;
-        bool isTaken = u::getBoolInput();
-        if (isTaken) newStudent.courseList.push_back(st::Course(v.id, v.name));
-      }
-
-      studentList.add(newStudent);
+      studentList.add(getNewStudentData());
       break;
 
     case 2:
@@ -240,7 +246,7 @@ void showStudentsMenu() {
 void showSchedule() {
   system("cls");
   cout << "# JADWAL" << endl;
-  cout << "+---------------------------------------------------------+" << endl;
+  cout << DIVIDER << endl;
   cout << "Sesi \tMata Kuliah" << endl;
 
   int sessionNumber = 1;
@@ -254,7 +260,7 @@ void showSchedule() {
     sessionNumber++;
   }
 
-  cout << "+---------------------------------------------------------+" << endl;
+  cout << DIVIDER << endl;
 }
 
 void showResultMenu() {
