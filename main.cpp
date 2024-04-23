@@ -184,7 +184,7 @@ void showCourseMenu() {
     system("cls");
     app::printH1("# DAFTAR MATA KULIAH");
     cout << DIVIDER << endl;
-    cout << "ID \tMata Kuliah" << endl;
+    app::printH2("ID \tMata Kuliah");
     mainGraph.printVertexList("\t");
     cout << DIVIDER << endl;
 
@@ -216,7 +216,7 @@ void showStudentsMenu() {
     system("cls");
     app::printH1("# DAFTAR MAHASISWA");
     cout << DIVIDER << endl;
-    cout << "ID \tNama Mahasiswa \t\tMata Kuliah Pilihan" << endl;
+    app::printH2("ID \tNama Mahasiswa \t\tMata Kuliah Pilihan");
     studentList.print();
     cout << DIVIDER << endl;
 
@@ -282,7 +282,8 @@ void showSchedule() {
 
   app::printH1("# JADWAL");
   cout << DIVIDER << endl;
-  cout << "Sesi \tMata Kuliah" << endl;
+
+  app::printH2("Sesi \tMata Kuliah");
 
   int sessionNumber = 1;
   for (auto session = mainGraph.colorList.begin(); session != mainGraph.colorList.end(); session++) {

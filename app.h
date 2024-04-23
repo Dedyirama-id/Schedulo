@@ -54,6 +54,10 @@ namespace app {
   };
 
   void printH1(string text) {
+    cout << BG_WHITE << BLACK << text << " " << RESET << endl;
+  }
+
+  void printH2(string text) {
     cout << BOLD << text << RESET << endl;
   }
 

@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <map>
 #include "utils.h"
+#include "app.h"
 
 using namespace std;
 
@@ -123,7 +124,7 @@ namespace gr {
       int sourceLocation = findVertexByID(sourceVID);
       int destLocation = findVertexByID(destVID);
       if (sourceLocation < 0 || destLocation < 0) {
-        cout << "Invalid Vertex ID entered." << endl;
+        app::printWarning("Invalid vertex ID");
         return;
       }
 
@@ -135,7 +136,7 @@ namespace gr {
     }
 
     void printGraph() {
-      cout << "Vertex count: " << vertices.size() << endl;
+      cout << BOLD << BG_WHITE << "Vertex count: " << vertices.size() << " " << RESET << endl;
       cout << "+---------------------------------------------------------+" << endl;
 
       for (int i = 0; i < vertices.size(); i++) {
@@ -185,14 +186,14 @@ namespace gr {
     }
 
     void printColoringResult() {
-      cout << "\nColoring Result:" << endl;
+      app::printH1("Coloring Result");
       for (const Vertex &vertex : vertices) {
         cout << "Vertex " << vertex.id << " colored with: " << vertex.colorIndex << endl;
       }
     }
 
     void printColorTable() {
-      cout << "\nColor Table:" << endl;
+      app::printH1("Color Table");
       for (const vector<string> &row : colorList) {
         cout << "[";
         for (const string &col : row) {
