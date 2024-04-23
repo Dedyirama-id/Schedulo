@@ -135,7 +135,7 @@ namespace gr {
     }
 
     void printGraph() {
-      cout << "\nVertex count: " << vertices.size() << endl;
+      cout << "Vertex count: " << vertices.size() << endl;
       cout << "+---------------------------------------------------------+" << endl;
 
       for (int i = 0; i < vertices.size(); i++) {

@@ -14,6 +14,7 @@ namespace app {
     Menu(initializer_list<string> menuItems) : menuList(menuItems) {}
 
     void printMenu() {
+      cout << "\e[?25l";
       for (int i = 1; i < menuList.size(); i++) {
         cout << (currentOption == i ? "> " : "  ") << menuList.at(i) << endl;
       }
@@ -21,7 +22,7 @@ namespace app {
     }
 
     int getChoice() {
-      cout << "\e[?25l";
+      // cout << "\e[?25l";
       while (true) {
         printMenu();
 
@@ -39,6 +40,7 @@ namespace app {
         case 13: // Tombol Enter
         case 32: // Tombol spasi
           cout << "\e[?25h";
+          system("cls");
           return currentOption;
         }
       }

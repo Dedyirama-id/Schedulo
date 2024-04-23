@@ -5,6 +5,7 @@
 #include "graph.h"
 #include "utils.h"
 #include "students.h"
+#include "app.h"
 
 using namespace std;
 
@@ -72,7 +73,7 @@ int main(int argc, char *argv[]) {
 
 st::Student getNewStudentData() {
   st::Student newStudent;
-  int id = u::getIntInput("\nMasukkan ID Mahasiswa: ");
+  int id = u::getIntInput("Masukkan ID Mahasiswa: ");
   string name = u::getStringInput("Masukkan Nama Mahasiswa (max 20 char): ", 20);
   newStudent.id = id;
   newStudent.name = name;
@@ -88,32 +89,9 @@ st::Student getNewStudentData() {
 }
 
 gr::Vertex getNewCourseVertexData() {
-  string id = u::getStringInput("\nMasukkan Kode Mata Kuliah (max 5 char): ", 5);
+  string id = u::getStringInput("Masukkan Kode Mata Kuliah (max 5 char): ", 5);
   string name = u::getStringInput("Masukkan Nama Mata Kuliah (max 20 char): ", 20);
   return gr::Vertex(id, name);
-}
-
-void showDefaultMenu() {
-  system("cls");
-  cout << "# PROGRAM MATA KULIAH" << endl;
-  cout << "1. Gunakan File External" << endl;
-  cout << "2. Input Data Secara Manual" << endl;
-  cout << "0. Batalkan dan Keluar Dari Program" << endl;
-
-  int choice = u::getChoice(0, 2);
-  switch (choice) {
-  case 0:
-    exit(0);
-
-  case 1:
-    loadInputFile();
-    return;
-
-  default:
-    return;
-  }
-
-  loadInputFile();
 }
 
 void loadInputFile(string fileName) {
@@ -131,7 +109,7 @@ void loadInputFile(string fileName) {
   } else {
     while (inputFile.is_open() == false) {
       filePath = "input/";
-      string input = u::getStringInput("\nMasukkan Nama File: (input.txt) ");
+      string input = u::getStringInput("Masukkan Nama File: (input.txt) ");
       if (input == "") input = "input.txt";
       if (input.find(".txt") == string::npos) input += ".txt";
 
@@ -176,6 +154,28 @@ void loadInputFile(string fileName) {
   }
 }
 
+void showDefaultMenu() {
+  system("cls");
+  cout << "# PROGRAM MATA KULIAH" << endl;
+
+  app::Menu defaultMenu({"Batalkan dan Keluar Dari Program", "Gunakan File External", "Input Data Secara Manual"});
+  int choice = defaultMenu.getChoice();
+
+  switch (choice) {
+  case 1:
+    loadInputFile();
+    return;
+
+  case 0:
+    exit(0);
+
+  default:
+    return;
+  }
+
+  loadInputFile();
+}
+
 void showCourseMenu() {
   while (true) {
     system("cls");
@@ -184,11 +184,9 @@ void showCourseMenu() {
     cout << "ID \tMata Kuliah" << endl;
     mainGraph.printVertexList("\t");
     cout << DIVIDER << endl;
-    cout << "1. Tambah Mata Kuliah" << endl;
-    cout << "2. Simpan dan Lanjutkan" << endl;
-    cout << "0. Batalkan dan Keluar Dari Program" << endl;
 
-    int choice = u::getChoice(0, 2);
+    app::Menu courseMenu({ "Batalkan dan Keluar Dari Program", "Tambah Mata Kuliah", "Simpan dan Lanjutkan" });
+    int choice = courseMenu.getChoice();
 
     switch (choice) {
     case 1:
@@ -218,11 +216,10 @@ void showStudentsMenu() {
     cout << "ID \tNama Mahasiswa \t\tMata Kuliah Pilihan" << endl;
     studentList.print();
     cout << DIVIDER << endl;
-    cout << "1. Tambah Mahasiswa" << endl;
-    cout << "2. Simpan dan Lanjutkan" << endl;
-    cout << "0. Batalkan dan Keluar Dari Program" << endl;
 
-    int choice = u::getChoice(0, 2);
+    app::Menu studentsMenu({ "Batalkan dan Keluar Dari Program", "Tambah Mahasiswa", "Simpan dan Lanjutkan" });
+    int choice = studentsMenu.getChoice();
+
     switch (choice) {
     case 1:
       studentList.add(getNewStudentData());
@@ -243,34 +240,14 @@ void showStudentsMenu() {
   }
 }
 
-void showSchedule() {
-  system("cls");
-  cout << "# JADWAL" << endl;
-  cout << DIVIDER << endl;
-  cout << "Sesi \tMata Kuliah" << endl;
-
-  int sessionNumber = 1;
-  for (auto session = mainGraph.colorList.begin(); session != mainGraph.colorList.end(); session++) {
-    cout << sessionNumber << "\t";
-    for (auto course = session->begin(); course != session->end(); course++) {
-      cout << mainGraph.getVertexByID(*course).id;
-      if (course != session->end() - 1) cout << ", ";
-    }
-    cout << endl;
-    sessionNumber++;
-  }
-
-  cout << DIVIDER << endl;
-}
-
 void showResultMenu() {
   while (true) {
     system("cls");
     showSchedule();
-    cout << "1. Simpan ke File" << endl;
-    cout << "0. Keluar Tanpa Menyimpan" << endl;
 
-    int choice = u::getChoice(0, 1);
+    app::Menu resultMenu({ "Keluar Tanpa Menyimpan", "Simpan ke File" });
+    int choice = resultMenu.getChoice();
+
     string fileName = "output/";
     string input;
     switch (choice) {
@@ -295,6 +272,26 @@ void showResultMenu() {
       return;
     }
   }
+}
+
+void showSchedule() {
+  system("cls");
+  cout << "# JADWAL" << endl;
+  cout << DIVIDER << endl;
+  cout << "Sesi \tMata Kuliah" << endl;
+
+  int sessionNumber = 1;
+  for (auto session = mainGraph.colorList.begin(); session != mainGraph.colorList.end(); session++) {
+    cout << sessionNumber << "\t";
+    for (auto course = session->begin(); course != session->end(); course++) {
+      cout << mainGraph.getVertexByID(*course).id;
+      if (course != session->end() - 1) cout << ", ";
+    }
+    cout << endl;
+    sessionNumber++;
+  }
+
+  cout << DIVIDER << endl;
 }
 
 void saveColorListToFile(string fileName) {
