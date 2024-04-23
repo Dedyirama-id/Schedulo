@@ -152,6 +152,7 @@ namespace gr {
       welchPowell();
     }
 
+    private:
     void welchPowell() {
       sortByDegree();
       int numColors = 0;
@@ -175,6 +176,7 @@ namespace gr {
       sortById();
     }
 
+    public:
     void printVertexList(string separator = " - ") {
       if (vertices.size() == 0) return;
       for (const auto &vertex : vertices) {

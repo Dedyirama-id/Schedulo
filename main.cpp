@@ -13,23 +13,21 @@ void showCourseMenu();
 void showStudentsMenu();
 void showSchedule();
 void loadInputFile(string fileName = "");
-void connectAllEdgesFromCourseList(vector<st::Course> newCourseList);
-void pushCourselistToGraph(vector<st::Course> newCourseList);
 void showResultMenu();
 void saveColorListToFile(string fileName);
 
 gr::Graph mainGraph;
-st::StudentList studentList;
+st::StudentList studentList(mainGraph);
 
 ifstream inputFile;
 ofstream outputFile;
 
+string inputFileName = "";
+string outputFileName = "";
+bool skipAll = false;
+
 int main(int argc, char *argv[]) {
   system("cls");
-
-  string inputFileName = "";
-  string outputFileName = "";
-  bool skipAll = false;
 
   for (int i = 1; i < argc; i++) {
     if (strcmp(argv[i], "-i") == 0 && i + 1 < argc) {
@@ -68,26 +66,6 @@ int main(int argc, char *argv[]) {
 
   inputFile.close();
   return 0;
-}
-
-void connectAllEdgesFromCourseList(vector<st::Course> newCourseList) {
-  st::Course course1, course2;
-  for (int i = 0; i < newCourseList.size(); i++) {
-    course1 = newCourseList.at(i);
-    for (int j = 0; j < newCourseList.size(); j++) {
-      course2 = newCourseList.at(j);
-      if (course1.id != course2.id) {
-        mainGraph.addEdgeByID(course1.id, course2.id);
-      }
-    }
-  }
-}
-
-void pushCourselistToGraph(vector<st::Course> newCourseList) {
-  for (int i = 0; i < newCourseList.size(); i++) {
-    st::Course newCourse = newCourseList.at(i);
-    mainGraph.addVertex(newCourse.id, newCourse.name);
-  }
 }
 
 void showDefaultMenu() {
@@ -170,8 +148,6 @@ void loadInputFile(string fileName) {
     newStudent.courseList.push_back(st::Course(courseListBlock, courseListBlock));
 
     studentList.add(newStudent);
-    pushCourselistToGraph(newStudent.courseList);
-    connectAllEdgesFromCourseList(newStudent.courseList);
   }
 }
 
@@ -243,7 +219,6 @@ void showStudentsMenu() {
         if (isTaken) newStudent.courseList.push_back(st::Course(v.id, v.name));
       }
 
-      connectAllEdgesFromCourseList(newStudent.courseList);
       studentList.add(newStudent);
       break;
 
