@@ -18,7 +18,7 @@ void showStudentsMenu();
 void showSchedule();
 void loadInputFile(string fileName = "");
 void showResultMenu();
-void saveColorListToFile(string fileName);
+void saveColorListToFile(string &fileName);
 
 gr::Graph mainGraph;
 st::StudentList studentList(mainGraph);
@@ -66,9 +66,12 @@ int main(int argc, char *argv[]) {
   } else {
     showSchedule();
     saveColorListToFile(outputFileName);
+    string command = "start output/" + outputFileName;
+    system(command.c_str());
   }
 
   inputFile.close();
+  outputFile.close();
   return 0;
 }
 
@@ -161,7 +164,7 @@ void showDefaultMenu() {
   system("cls");
   app::printH1("# MENU UTAMA");
 
-  app::Menu defaultMenu({"Batalkan dan Keluar Dari Program", "Gunakan File External", "Input Data Secara Manual"});
+  app::Menu defaultMenu({ "Batalkan dan Keluar Dari Program", "Gunakan File External", "Input Data Secara Manual" });
   int choice = defaultMenu.getChoice();
 
   switch (choice) {
@@ -299,7 +302,7 @@ void showSchedule() {
   cout << DIVIDER << endl;
 }
 
-void saveColorListToFile(string fileName) {
+void saveColorListToFile(string &fileName) {
   string filePath = "output/";
   if (fileName != "") {
     if (fileName.find(".txt") == string::npos) fileName += ".txt";
