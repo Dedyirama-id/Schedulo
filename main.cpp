@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <fstream>
+#include <cstring>
 #include "graph.h"
 #include "utils.h"
 #include "students.h"
@@ -11,10 +12,11 @@ void showDefaultMenu();
 void showCourseMenu();
 void showStudentsMenu();
 void showSchedule();
-void loadInputFile();
+void loadInputFile(string fileName = "");
 void connectAllEdgesFromCourseList(vector<st::Course> newCourseList);
 void pushCourselistToGraph(vector<st::Course> newCourseList);
 void showResultMenu();
+void saveColorListToFile(string fileName);
 
 gr::Graph mainGraph;
 st::StudentList studentList;
@@ -22,22 +24,47 @@ st::StudentList studentList;
 ifstream inputFile;
 ofstream outputFile;
 
-int main() {
+int main(int argc, char *argv[]) {
   system("cls");
 
-  showDefaultMenu();
-  showCourseMenu();
-  showStudentsMenu();
+  string inputFileName = "";
+  string outputFileName = "";
+  bool skipAll = false;
 
-  system("cls");
-  mainGraph.printGraph();
-  u::wait("Tekan Enter Untuk Melanjutkan...");
+  for (int i = 1; i < argc; i++) {
+    if (strcmp(argv[i], "-i") == 0 && i + 1 < argc) {
+      inputFileName = argv[i + 1];
+    } else if (strcmp(argv[i], "-o") == 0 && i + 1 < argc) {
+      outputFileName = argv[i + 1];
+    } else if (strcmp(argv[i], "--skip") == 0) {
+      skipAll = true;
+    }
+  }
 
-  system("cls");
-  cout << "# Menyusun Jadwal..." << endl;
+  if (inputFileName == "") {
+    showDefaultMenu();
+    showCourseMenu();
+    showStudentsMenu();
+  } else {
+    loadInputFile(inputFileName);
+  }
+
+  if (skipAll == false) {
+    system("cls");
+    mainGraph.printGraph();
+    u::wait("Tekan Enter Untuk Melanjutkan...");
+
+    system("cls");
+    cout << "# Menyusun Jadwal..." << endl;
+  }
+
   mainGraph.graphColoring();
-
-  showResultMenu();
+  if (outputFileName == "") {
+    showResultMenu();
+  } else {
+    showSchedule();
+    saveColorListToFile(outputFileName);
+  }
 
   inputFile.close();
   return 0;
@@ -72,6 +99,9 @@ void showDefaultMenu() {
 
   int choice = u::getChoice(0, 2);
   switch (choice) {
+  case 0:
+    exit(0);
+
   case 1:
     loadInputFile();
     return;
@@ -83,17 +113,30 @@ void showDefaultMenu() {
   loadInputFile();
 }
 
-void loadInputFile() {
-  while (inputFile.is_open() == false) {
-    string fileName = "input/";
-    string input = u::getStringInput("\nMasukkan Nama File: (input.txt) ");
-    if (input == "") input = "input.txt";
-    if (input.find(".txt") == string::npos) input += ".txt";
+void loadInputFile(string fileName) {
+  string filePath = "input/";
+  if (fileName != "") {
+    if (fileName.find(".txt") == string::npos) fileName += ".txt";
+    filePath += fileName;
+    inputFile.open(filePath);
 
-    fileName += input;
-    inputFile.open(fileName);
-    if (inputFile.is_open() == true) break;
-    cout << "File tidak ditemukan!" << endl;
+    if (inputFile.is_open() == false) {
+      cout << "File Input Tidak Ditemukan!" << endl;
+      u::wait();
+      exit(0);
+    }
+  } else {
+    while (inputFile.is_open() == false) {
+      filePath = "input/";
+      string input = u::getStringInput("\nMasukkan Nama File: (input.txt) ");
+      if (input == "") input = "input.txt";
+      if (input.find(".txt") == string::npos) input += ".txt";
+
+      filePath += input;
+      inputFile.open(filePath);
+      if (inputFile.is_open() == true) break;
+      cout << "File tidak ditemukan!" << endl;
+    }
   }
 
   while (inputFile.eof() == false) {
@@ -249,7 +292,6 @@ void showResultMenu() {
     int choice = u::getChoice(0, 1);
     string fileName = "output/";
     string input;
-    int sessionNumber;
     switch (choice) {
     case 1:
       while (true) {
@@ -258,31 +300,48 @@ void showResultMenu() {
         if (input.find(".txt") == string::npos) input += ".txt";
 
         fileName += input;
-        inputFile.open(fileName);
-        if (inputFile.is_open() == true) break;
+        outputFile.open(fileName);
+        if (outputFile.is_open() == true) {
+          outputFile.close();
+          break;
+        }
         cout << "Gagal Membuat File! Coba Lagi..." << endl;
       }
 
-      outputFile.open(fileName, ios::out | ios::trunc);
-      outputFile << "Sesi \tMata Kuliah" << endl;
-
-      sessionNumber = 1;
-      for (auto session = mainGraph.colorList.begin(); session != mainGraph.colorList.end(); session++) {
-        outputFile << sessionNumber << "\t";
-        for (auto course = session->begin(); course != session->end(); course++) {
-          outputFile << mainGraph.getVertexByID(*course).id;
-          if (course != session->end() - 1) outputFile << ",";
-        }
-        outputFile << endl;
-        sessionNumber++;
-      }
-      outputFile.close();
-
-      cout << "Jadwal Telah Disimpan!" << endl;
-      u::wait();
+      saveColorListToFile(input);
 
     default:
       return;
     }
   }
+}
+
+void saveColorListToFile(string fileName) {
+  string filePath = "output/";
+  if (fileName != "") {
+    if (fileName.find(".txt") == string::npos) fileName += ".txt";
+    filePath += fileName;
+    outputFile.open(filePath, ios::out | ios::trunc);
+  } else {
+    cout << "Nama File Tidak Valid!" << endl;
+    exit(0);
+  }
+
+  if (outputFile.is_open() == false) cout << "Gagal Menulis File!" << endl;
+
+  outputFile << "Sesi \tMata Kuliah" << endl;
+
+  int sessionNumber = 1;
+  for (auto session = mainGraph.colorList.begin(); session != mainGraph.colorList.end(); session++) {
+    outputFile << sessionNumber << "\t";
+    for (auto course = session->begin(); course != session->end(); course++) {
+      outputFile << mainGraph.getVertexByID(*course).id;
+      if (course != session->end() - 1) outputFile << ",";
+    }
+    outputFile << endl;
+    sessionNumber++;
+  }
+  outputFile.close();
+
+  cout << "Jadwal Telah Disimpan!" << endl;
 }
