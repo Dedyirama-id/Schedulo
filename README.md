@@ -16,7 +16,7 @@ Hasil jadwal berupa daftar beberapa sesi dengan mata kuliah di setiap sesi. Satu
 ### Command dengan Argument
 1. Buka Terminal (CMD, Powershell, bash, dll) pada folder project.
 2. Jalankan perintah untuk memanggil program Schedulo.
-`./schedulo -i input.txt -o output.txt --skip`
+```./schedulo -i input.txt -o output.txt --skip```
   - **./schedulo**: untuk memanggil program schedulo.
   - **-i**: argumen untuk memberikan input file, diikuti nama file input txt yang berada didalam folder input.
   - **-o**: argumen untuk menyimpan hasil jadwal ke file external berupa file txt, diikuti nama file yang akan disimpan.
