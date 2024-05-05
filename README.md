@@ -25,7 +25,7 @@ Hasil jadwal berupa daftar beberapa sesi dengan mata kuliah di setiap sesi. Satu
 - `--skip`: untuk melewati semua input konfirmasi
 
 ## Nama Kelompok
-1. 23051204356 Dedy Irama 2023K
-2. 23051204360 Kenang Banyu Ramadhan_2023K
-3. 23051204374 Rafi Arnandha Pramudianto_2023K
-4. 23051204378 Lukman Adi Wijaya_2023K
+1. 23051204356_Dedy Irama_2023K
+2. 23051204360_Kenang Banyu Ramadhan_2023K
+3. 23051204374_Rafi Arnandha Pramudianto_2023K
+4. 23051204378_Lukman Adi Wijaya_2023K
